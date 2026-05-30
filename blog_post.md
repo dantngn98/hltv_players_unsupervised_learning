@@ -3,7 +3,9 @@
 *A data science deep-dive into what the stats actually say about player archetypes at the top of professional Counter-Strike 2.*
 
 ---
-![CS Thumpnail](images/cs_thumpnail.jpg)
+<div align="center">
+  <img src="images/cs_thumpnail.jpg" alt="Counter Strike Thumpnail">
+</div>
 
 ## Introduction
 
@@ -69,11 +71,68 @@ To find out, I applied four unsupervised learning techniques to the dataset:
 
 - **PCA / SVD** – to identify which combinations of features capture the most variance, revealing the true underlying dimensions of player performance.
 - **K-Means Clustering** – to partition players into statistically similar groups, with the elbow method and silhouette scores guiding the choice of k.
-- **Gaussian Mixture Models (GMM)** – to assign probabilistic cluster memberships, allowing borderline players to carry partial membership in multiple archetypes.
 - **Hierarchical Clustering** – to build a bottom-up tree of player similarities, producing a dendrogram that reveals how players relate at different levels of granularity.
 
 The goal is not to definitively label players with roles – that would require positional and timing data HLTV does not expose publicly. The goal is to see what naturally emerges from the numbers: are there genuine statistical archetypes among professional CS2 players, and if so, what defines them?
 
 ---
+## Theoretical Background
 
-*Data was scraped from HLTV.org via browser automation, covering February 19 – May 19, 2026, filtered to top-20 opponents with a minimum of 10 maps played. Code and data are in the accompanying repository.*
+This section covers the three unsupervised learning methods used in this analysis: Principal Components Analysis (PCA), K-Means Clustering, and Hierarchical Clustering. All methods are discussed in James et al. [1].
+
+---
+
+### Principal Components Analysis
+
+PCA finds a low-dimensional representation of a high-dimensional dataset by identifying the directions of greatest variance. The **first principal component** is the normalized linear combination of features that captures the most variance:
+
+$$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \cdots + \phi_{p1}X_p$$
+
+where the loading vector $\phi_1 = (\phi_{11}, \ldots, \phi_{p1})^T$ is constrained to $\sum_j \phi_{j1}^2 = 1$. Each subsequent component is orthogonal to the previous ones and maximizes the remaining variance. Geometrically, the first $M$ principal components span the $M$-dimensional subspace closest to the data in terms of average squared Euclidean distance.
+
+**Tuning:** The number of components $M$ is selected using a **scree plot** of the proportion of variance explained (PVE) per component:
+
+$$\text{PVE}_m = \frac{\sum_{i=1}^n z_{im}^2}{\sum_{j=1}^p \sum_{i=1}^n x_{ij}^2}$$
+
+One retains enough components to explain a meaningful share of total variance, looking for an "elbow" in the scree plot, or go by a desired threshold such as 85% or 90%.
+
+**Interpretation:** Loading vectors indicate which features contribute to each component. Observations are interpreted through their scores projected onto the principal component axes.
+
+**Limitations:** PCA assumes linear relationships and is sensitive to variable scaling — features must be standardized before application. Components can also be difficult to interpret when loadings are spread across many variables.
+
+---
+
+### K-Means Clustering
+
+K-Means partitions $n$ observations into $K$ non-overlapping clusters by minimizing total within-cluster variation. Formally, the objective is:
+
+$$\underset{C_1, \ldots, C_K}{\text{minimize}} \sum_{k=1}^K \frac{1}{|C_k|} \sum_{i, i' \in C_k} \sum_{j=1}^p (x_{ij} - x_{i'j})^2$$
+
+The algorithm iterates two steps: (1) assign each observation to the nearest cluster centroid, and (2) recompute centroids as the mean of all assigned observations. This is repeated until assignments stabilize. The algorithm finds a local optimum, so it should be run multiple times with different random initializations, selecting the solution with the lowest objective value.
+
+**Tuning:** $K$ is the primary hyperparameter, selected using the **elbow method** (inertia vs. $K$) and the **silhouette score**, which measures how similar each point is to its own cluster relative to the nearest competing cluster. Silhouette scores range from $-1$ to $1$; higher is better.
+
+**Interpretation:** Each cluster is summarized by its centroid. Cluster profiles are examined by comparing mean feature values across groups.
+
+**Limitations:** K-Means requires $K$ to be specified in advance, assumes roughly spherical clusters of similar size, and is sensitive to outliers. Because it finds local optima, results can vary across runs.
+
+---
+
+### Hierarchical Clustering
+
+Hierarchical clustering builds a nested sequence of groupings without requiring $K$ to be specified in advance. The agglomerative (bottom-up) approach begins with each observation as its own cluster and iteratively merges the two most similar clusters:
+
+1. Compute all $\binom{n}{2}$ pairwise dissimilarities.
+2. Fuse the two most similar clusters.
+3. Recompute inter-cluster dissimilarities and repeat until all observations are in one cluster.
+
+The result is a **dendrogram** — a tree diagram where the height of each fusion reflects the dissimilarity between merged groups. Clusters are extracted by cutting the dendrogram at a chosen height.
+
+**Linkage:** The choice of linkage method determines how inter-cluster dissimilarity is computed. **Complete linkage** uses the maximum pairwise distance between clusters; **average linkage** uses the mean; **single linkage** uses the minimum. Complete and average linkage are preferred, as single linkage tends to produce elongated, chain-like clusters.
+
+**Tuning:** Key choices are the linkage method and dissimilarity measure (Euclidean distance is standard). The cut height is chosen by visual inspection of the dendrogram.
+
+**Limitations:** Hierarchical clustering assumes a nested cluster structure, which may not reflect reality. Early merges cannot be undone, so errors propagate upward. It is also computationally more expensive than K-Means at large $n$.
+
+
+
