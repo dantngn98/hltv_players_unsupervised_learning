@@ -98,7 +98,7 @@ One retains enough components to explain a meaningful share of total variance, l
 
 **Interpretation:** Loading vectors indicate which features contribute to each component. Observations are interpreted through their scores projected onto the principal component axes.
 
-**Limitations:** PCA assumes linear relationships and is sensitive to variable scaling — features must be standardized before application. Components can also be difficult to interpret when loadings are spread across many variables.
+**Limitations:** PCA assumes linear relationships and is sensitive to variable scaling – features must be standardized before application. Components can also be difficult to interpret when loadings are spread across many variables.
 
 ---
 
@@ -126,7 +126,7 @@ Hierarchical clustering builds a nested sequence of groupings without requiring 
 2. Fuse the two most similar clusters.
 3. Recompute inter-cluster dissimilarities and repeat until all observations are in one cluster.
 
-The result is a **dendrogram** — a tree diagram where the height of each fusion reflects the dissimilarity between merged groups. Clusters are extracted by cutting the dendrogram at a chosen height.
+The result is a **dendrogram** – a tree diagram where the height of each fusion reflects the dissimilarity between merged groups. Clusters are extracted by cutting the dendrogram at a chosen height.
 
 **Linkage:** The choice of linkage method determines how inter-cluster dissimilarity is computed. **Complete linkage** uses the maximum pairwise distance between clusters; **average linkage** uses the mean; **single linkage** uses the minimum. Complete and average linkage are preferred, as single linkage tends to produce elongated, chain-like clusters.
 
