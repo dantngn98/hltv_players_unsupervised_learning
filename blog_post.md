@@ -3,6 +3,7 @@
 *A data science deep-dive into what the stats actually say about player archetypes at the top of professional Counter-Strike 2.*
 
 ---
+![CS Thumpnail](images/cs_thumpnail.jpg)
 
 ## Introduction
 
