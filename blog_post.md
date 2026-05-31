@@ -172,9 +172,60 @@ Agglomerative hierarchical clustering was applied to the full standardized featu
 
 ## Results
 
+### Principal Component Analysis (PCA)
 
+<div align="center">
+  <img src="images/scree_plot.jpg" alt="Scree Plot">
+</div>
 
+*Figure 1 – Individual and cumulative proportion of variance explained by each principal component. The dashed line marks the 90% threshold.*
 
+The scree plot reveals two things immediately. First, no single component dominates: PC1 captures a meaningful share of variance but far from the majority, and the individual bars decline gradually rather than dropping sharply after the first component. Second, reaching 90% of total variance requires **9 principal components** out of a possible 40.
+Player performance is genuinely multi-dimensional as no single axis summarizes the data cleanly. This makes intuitive sense: a player's statistical fingerprint is shaped by several largely independent factors such as how good they are overall, what weapon they prefer, how much playing time they have had, and what role they fill on the team.
 
+Table 1 shows the three largest positive and negative loadings for each of the nine retained components.
 
+| PC | Top positive loadings | Top negative loadings |
+|----|----------------------|-----------------------|
+| PC1 | KD\_Ratio (+0.258), KPR (+0.258), ROUND\_SWING (+0.257) | DPR (–0.119), smg\_pct (–0.145), smg\_kills (–0.084) |
+| PC2 | rifle\_kills (+0.296), rifle\_pct (+0.288), ak47\_kills (+0.274) | sniper\_pct\_log (–0.284), sniper\_kills\_log (–0.259), awp\_kills\_log (–0.257) |
+| PC3 | Rounds\_played (+0.371), Maps\_played (+0.367), Total\_deaths (+0.343) | ADR (–0.164), Impact\_rating (–0.158), MULTI\_KILL (–0.146) |
+| PC4 | pistol\_pct (+0.424), Saved\_teammates (+0.312), deagle\_kills (+0.272) | smg\_kills (–0.384), smg\_pct (–0.376), Grenade\_dmg (–0.280) |
+| PC5 | KAST (+0.388), m4a1\_kills (+0.334), KD\_Ratio (+0.137) | DPR (–0.373), m4a1s\_kills (–0.242), deagle\_kills (–0.225) |
+| PC6 | m4a1s\_kills (+0.386), Grenade\_dmg (+0.359), Assists (+0.206) | m4a1\_kills (–0.340), smg\_kills (–0.333), smg\_pct (–0.307) |
+| PC7 | pistol\_pct (+0.447), m4a1s\_kills (+0.399), smg\_pct (+0.296) | m4a1\_kills (–0.432), Saved\_teammates (–0.277), ak47\_kills (–0.113) |
+| PC8 | Saved\_by\_teammate (+0.706), Saved\_teammates (+0.441), KAST (+0.252) | m4a1\_kills (–0.253), deagle\_kills (–0.226), Grenade\_dmg (–0.161) |
+| PC9 | Grenade\_dmg (+0.579), Assists (+0.350), pistol\_pct (+0.334) | m4a1s\_kills (–0.253), ak47\_kills (–0.119), glock\_kills (–0.110) |
+
+*Table 1 – Top loadings (by absolute magnitude) for each principal component.*
+
+<div align="center">
+  <img src="images/biplot.jpg" alt="Biplot PC1 vs PC2">
+</div>
+
+*Figure 2 – Biplot of player scores on PC1 and PC2. Red arrows show the loading directions of the five features with the largest combined magnitude across both components.*
+
+---
+
+### Clustering Analysis
+
+---
+
+## Discussion
+
+### Breaking Down the Principal Components
+As the original 40-dimensional feature space was decomposed into 9 principal components. the **rotation matrix** (`pca.components_`) tells you what each PC measures while the **scores** (`X`) tell you where each player stands on those measures.
+
+Referring to Table 1:
+**PC1 – Overall Performance.** Output-oriented metric such as KD\_Ratio, KPR, and ROUND\_SWING metric pulls positive. DPR and SMG percentage pull negative. As a result, this component is a composite skill index. High scores on PC1 mean more kills, fewer deaths, and more rounds swung in the team's favor. 
+
+**PC2 – Weapon Style (AWP vs. Rifle).** The loadings split cleanly along weapon lines. Rifle\_kills, rifle\_pct, and ak47\_kills load strongly positive while sniper\_pct\_log, sniper\_kills\_log, and awp\_kills\_log load strongly negative at nearly equal magnitude. Moving along PC2 from negative to positive means moving from dedicated AWPer to dedicated rifler. 
+
+**PC3 – Playing Volume vs. Per-Round Impact.** Rounds\_played, Maps\_played, and Total\_deaths dominate the positive side while ADR, Impact\_rating, and MULTI\_KILL pull negative. This axis separates players who accumulate rounds from those who are efficient per round. High PC3 scores point to the IGL and support role player profile. They have plenty of maps played, but below-average per-round output.
+
+**PC4 – Economy Weapon Preference.** Pistol\_pct and deagle\_kills load positively while smg\_kills and smg\_pct load negatively. On eco and force-buy rounds, players either choose pistols or SMGs and this component distinguishes these two styles. The positive loading on Saved\_teammates links the deagle-preference style to players who has higer aiming skills and tends to stay behide to trade rather than running with SMGs.
+
+**PC5 through PC9** capture progressively narrower dimensions: CT-side survivability (PC5), M4A1-S vs. M4A1 preference (PC6 and PC7), teammate-save dynamics (PC8), and utility/grenade damage paired with assist rate (PC9). These later components explain relatively little variance individually but collectively cover meaningful structural variation that the first four miss.
+
+The biplot in Figure 2 reveals a clear split along the PC2 axis. One band of players clusters toward negative PC2 values (AWPers, pulled by the sniper loading arrows), while the larger group sits at positive or near-zero PC2 (riflers). Within each band, players spread horizontally along PC1 according to overall performance level. This structure would be invisible in a plot of any two original features. Plotting Rating 3.0 against ADR shows only a diagonal performance band with no weapon-style separation, since both metrics are output measures regardless of weapon. Plotting rifle\_kills against awp\_kills shows the weapon split but loses all skill-level information.
 
