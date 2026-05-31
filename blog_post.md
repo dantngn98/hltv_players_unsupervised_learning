@@ -9,8 +9,6 @@
 
 ## Introduction
 
-### A Game That Grew Up With Us
-
 I have been playing Counter-Strike for longer than I care to admit. It started on a family computer in CS 1.6 – the era of pixelated smokes and 64-tick servers – then progressed through CS:GO's ranked matchmaking and global competitive scene, and finally into CS2 in 2023, which rebuilt the engine on Source 2 with volumetric smokes and a proper subtick system. Same DNA, new body.
 
 Playing through all three eras gives you an intuition for the game that is hard to fake. You understand why a player holds a particular angle, why a team might stack one bombsite over another, and why an AWPer having a bad day can unravel an entire strategy. That intuition is exactly what I wanted to test with data.
@@ -82,7 +80,7 @@ This section covers the three unsupervised learning methods used in this analysi
 
 ---
 
-### Principal Components Analysis
+### Principal Components Analysis (PCA)
 
 PCA finds a low-dimensional representation of a high-dimensional dataset by identifying the directions of greatest variance. The **first principal component** is the normalized linear combination of features that captures the most variance:
 
@@ -133,6 +131,50 @@ The result is a **dendrogram** – a tree diagram where the height of each fusio
 **Tuning:** Key choices are the linkage method and dissimilarity measure (Euclidean distance is standard). The cut height is chosen by visual inspection of the dendrogram.
 
 **Limitations:** Hierarchical clustering assumes a nested cluster structure, which may not reflect reality. Early merges cannot be undone, so errors propagate upward. It is also computationally more expensive than K-Means at large $n$.
+
+---
+
+## Methodology
+
+### Data Collection and Processing
+
+Player statistics were scraped directly from HLTV.org using browser automation, covering the period February 19 – May 19, 2026, filtered to matches against top-20 ranked opponents with a minimum of 10 maps played. This produced a dataset of **98 professional players**. Performance statistics (Rating 3.0, KAST, ADR, KPR, DPR, T/CT rating, round swing, impact rating, multi-kill rate, headshot percentage, grenade damage, save-related metrics, and weapon kill distribution) were collected in one scraping pass, resulting in **40 numeric features** per player.
+
+Distribution inspection revealed that four sniper-related columns – `sniper_kills`, `sniper_pct`, `awp_kills`, and `ssg08_kills` – were heavily zero-inflated, since the majority of players are riflers who rarely touch the AWP. These were replaced with log-transformed equivalents using `log1p` to compress the right tail and prevent the AWPer signal from being distorted by extreme raw values. Two low-information columns (`top_weapon` and `top_weapon_pct`) were dropped.
+
+All 40 features were standardized to zero mean and unit variance using `StandardScaler` before any further analysis. This is essential for both PCA and clustering because without it, features with large absolute scales (e.g. total kills in the hundreds) would dominate those on smaller scales (e.g. assists per round near 0.2).
+
+---
+
+### Principal Component Analysis (PCA)
+PCA was applied to the standardized feature matrix using `sklearn.decomposition.PCA` with `n_components=0.9`, which retains the minimum number of components necessary to explain 90% of the total variance. A combined scree plot – showing both individual and cumulative proportion of variance explained – was produced to validate this threshold and examine the decomposition structure. 
+
+The PCA-reduced output was used as input for K-Means. Hierarchical clustering was run on the full 40-feature standardized matrix instead, to preserve fine-grained pairwise similarity structure that dimensionality reduction might discard.
+
+---
+
+### K-Means Clustering
+
+K-Means was applied to the PCA-reduced data with $k$ ranging from 2 to 10. Each model was run with `n_init=20` random initializations to reduce sensitivity to starting conditions, selecting the solution that minimized within-cluster inertia at each $k$. Two metrics guided the choice of $k$:
+
+- **Inertia (elbow plot):** Total within-cluster sum of squares as a function of $k$. A distinct elbow indicates diminishing returns from adding further clusters.
+- **Silhouette score:** Ranges from $-1$ to $1$ and measures how much more similar each point is to its own cluster than to the nearest alternative. Higher values indicate more compact, well-separated clusters.
+
+Both metrics were plotted across the full range of $k$ and inspected together to select the final number of clusters. 
+
+---
+
+### Hierarchical Clustering
+
+Agglomerative hierarchical clustering was applied to the full standardized feature matrix using `sklearn.cluster.AgglomerativeClustering` with `distance_threshold=0` and `n_clusters=None`, producing a complete dendrogram for each linkage method. Four linkage strategies were evaluated by visual inspection of their dendrograms. Silhouette scores were then computed on the full standardized feature matrix for Ward clustering across $k = 2$ to $6$, and a silhouette plot was produced. The dendrogram was cut at $k = 2$, $k = 3$, and $k = 4$ using `scipy.cluster.hierarchy.cut_tree`, and each solution was profiled by comparing mean feature values across clusters. The final number of clusters was selected based on both the silhouette scores and the interpretability of the resulting groupings.
+
+---
+
+## Results
+
+
+
+
 
 
 
