@@ -217,6 +217,7 @@ Table 1 shows the three largest positive and negative loadings for each of the n
 As the original 40-dimensional feature space was decomposed into 9 principal components. the **rotation matrix** (`pca.components_`) tells you what each PC measures while the **scores** (`X`) tell you where each player stands on those measures.
 
 Referring to Table 1:
+
 **PC1 – Overall Performance.** Output-oriented metric such as KD\_Ratio, KPR, and ROUND\_SWING metric pulls positive. DPR and SMG percentage pull negative. As a result, this component is a composite skill index. High scores on PC1 mean more kills, fewer deaths, and more rounds swung in the team's favor. 
 
 **PC2 – Weapon Style (AWP vs. Rifle).** The loadings split cleanly along weapon lines. Rifle\_kills, rifle\_pct, and ak47\_kills load strongly positive while sniper\_pct\_log, sniper\_kills\_log, and awp\_kills\_log load strongly negative at nearly equal magnitude. Moving along PC2 from negative to positive means moving from dedicated AWPer to dedicated rifler. 
