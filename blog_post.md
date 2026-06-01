@@ -9,9 +9,9 @@
 
 ## Introduction
 
-I have been playing Counter-Strike for longer than I care to admit. It started on a family computer in CS 1.6 – the era of pixelated smokes and 64-tick servers – then progressed through CS:GO's ranked matchmaking and global competitive scene, and finally into CS2 in 2023, which rebuilt the engine on Source 2 with volumetric smokes and a proper subtick system. Same DNA, new body.
+We have been playing Counter-Strike for longer than we care to admit. It started on family computers in CS 1.6 – the era of pixelated smokes and 64-tick servers – then progressed through CS:GO's ranked matchmaking and global competitive scene, and finally into CS2 in 2023, which rebuilt the engine on Source 2 with volumetric smokes and a proper subtick system. Same DNA, new body.
 
-Playing through all three eras gives you an intuition for the game that is hard to fake. You understand why a player holds a particular angle, why a team might stack one bombsite over another, and why an AWPer having a bad day can unravel an entire strategy. That intuition is exactly what I wanted to test with data.
+Playing through all three eras gives you an intuition for the game that is hard to fake. You understand why a player holds a particular angle, why a team might stack one bombsite over another, and why an AWPer having a bad day can unravel an entire strategy. That intuition is exactly what we wanted to test with data.
 
 ---
 
@@ -41,7 +41,7 @@ Counter-Strike is one of the world's most-watched esports, structured around Val
 
 **Impact Rating** captures clutch contributions – multi-kill rounds and 1vX situations. **Grenade Damage per Round** reflects utility usage: flashes, HEs, and molotovs that deal damage without earning a kill credit.
 
-For weapon-specific analysis, I collected each player's kill share across four categories: **rifle**, **sniper**, **pistol**, and **SMG**.
+For weapon-specific analysis, we collected each player's kill share across four categories: **rifle**, **sniper**, **pistol**, and **SMG**.
 
 ---
 
@@ -65,7 +65,7 @@ The **IGL** (In-Game Leader) calls strategy and sacrifices personal stats to do 
 
 The central question is simple: **do the statistics tell us anything about how players play, or just how good they are?**
 
-To find out, I applied four unsupervised learning techniques to the dataset:
+To find out, we applied four unsupervised learning techniques to the dataset:
 
 - **PCA / SVD** – to identify which combinations of features capture the most variance, revealing the true underlying dimensions of player performance.
 - **K-Means Clustering** – to partition players into statistically similar groups, with the elbow method and silhouette scores guiding the choice of k.
@@ -294,7 +294,9 @@ Referring to Table 1:
 
 The biplot in Figure 2 reveals a clear split along the PC2 axis. One band of players clusters toward negative PC2 values (AWPers, pulled by the sniper loading arrows), while the larger group sits at positive or near-zero PC2 (riflers). Within each band, players spread horizontally along PC1 according to overall performance level. This structure would be invisible in a plot of any two original features. Plotting Rating 3.0 against ADR shows only a diagonal performance band with no weapon-style separation, since both metrics are output measures regardless of weapon. Plotting rifle_kills against awp_kills shows the weapon split but loses all skill-level information.
 
-### Breaking Down the K-Means Clustering
+---
+
+### K-Means Clustering
 
 
 <div align="center">
@@ -307,14 +309,14 @@ To better understand how the clusters were formed, we examined the distributions
 
 The sniper-related metrics show the clearest separation, with Cluster 0 forming a completely distinct AWPer-heavy group. In contrast, Clusters 1 and 2 overlap heavily in sniper usage, confirming that both are primarily rifle-oriented players. The remaining variables, especially rifle_pct and Impact_rating, separate supportive riflers from elite carry players. Cluster 2 consistently occupies the high end of the impact distribution, while Cluster 1 centers around lower-impact but more utility-oriented profiles. Overall, these plots reinforce that the clustering captures meaningful gameplay archetypes rather than arbitrary statistical groupings. Thus the following are how we interpretted the clusters:
 
-Cluster 0 – Dedicated AWPers
+**Cluster 0 – Dedicated AWPers**
 
 Cluster 0 is characterized by extremely high sniper-related metrics, with dramatically elevated values for sniper_kills_log, sniper_pct_log, and awp_kills_log, while maintaining relatively low rifle usage percentages. Players in this cluster also post strong overall ratings, high K/D ratios, and strong round-swing values. Statistically, this is the clearest and most distinct cluster in the dataset, strongly matching the traditional primary AWPer role: players who generate impact through opening picks, angle control, and low-death, high-value engagements rather than raw rifle volume. The comparatively lower headshot percentage in this cluster is also expected, since AWP kills do not require headshots.
 
-Cluster 1 – Support / Low-Impact Riflers
+**Cluster 1 – Support / Low-Impact Riflers**
 
 Cluster 1 contains the lowest-performing statistical profiles overall. Players in this group have the lowest Rating 3.0, Impact Rating, ADR, KPR, and K/D ratio among all clusters, although they also show the highest grenade damage per round and relatively elevated assist rates. Weapon usage patterns indicate heavy rifle dependence but lower overall fragging efficiency. This statistical profile aligns closely with support players, anchor players, and some IGLs, whose responsibilities emphasize utility usage, site anchoring, and enabling teammates rather than maximizing personal output. Importantly, this cluster should not be interpreted as “bad players.” These are still elite professional competitors playing against top-20 opposition; rather, the cluster reflects players whose in-game responsibilities sacrifice individual statistical production for team structure and utility value.
 
-Cluster 2 – Elite Star Riflers
+**Cluster 2 – Elite Star Riflers**
 
 Cluster 2 represents the highest-output riflers in the dataset. These players lead all clusters in Rating 3.0, ADR, KPR, Impact Rating, multi-kill percentage, and total rifle kills. Their extremely high AK-47 and M4 kill totals, combined with strong headshot percentages, indicate aggressive mechanically skilled riflers capable of consistently winning duels. Unlike Cluster 0, this group derives its impact primarily from rifle engagements rather than sniper specialization. The cluster captures the archetype of the modern star rifler: high-volume fraggers who create openings, dominate aim duels, and generate large amounts of round-winning damage. The distinction between Cluster 1 and Cluster 2 is especially important. Both are rifle-oriented groups, but Cluster 2 separates itself through substantially higher efficiency and impact metrics, suggesting that the clustering successfully distinguishes supportive riflers from elite carry-style players.
