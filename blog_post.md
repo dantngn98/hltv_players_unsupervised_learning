@@ -239,13 +239,13 @@ For this reason, the final analysis uses k = 3. Although its silhouette score is
 ### Hierarchical Clustering Analysis
 
 <div align="center">
-  <img src="images/ward_dendrogram.jpg" alt="Hierarchical Dendrogram">
+  <img src="images/ward_dendrogram.jpg" alt="Hierarchical Dendrogram" width="70%">
 </div>
 
 *Figure 6 – Ward linkage dendrogram for the CS2 player dataset.*
 
 <div align="center">
-  <img src="images/ward_silhouette.jpg" alt="Hierarchical Silhouette Scores">
+  <img src="images/ward_silhouette.jpg" alt="Hierarchical Silhouette Scores" width="70%">
 </div>
 
 *Figure 7 – Silhouette scores for Hierarchical clustering across k = 2 through k = 6.*
