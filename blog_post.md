@@ -239,16 +239,21 @@ For this reason, the final analysis uses k = 3. Although its silhouette score is
 ### Hierarchical Clustering Analysis
 
 <div align="center">
-  <img src="images/ward_dendrogram.jpg" alt="Hierarchical Dendrogram" width="70%">
+  <img src="images/ward_dendrogram.jpg" alt="Hierarchical Dendrogram">
 </div>
 
-*Figure 6 – Ward linkage dendrogram for the CS2 player dataset.*
+
+<p align="center">
+  <em>Figure 6 – Ward linkage dendrogram for the CS2 player dataset.</em>
+</p>
 
 <div align="center">
-  <img src="images/ward_silhouette.jpg" alt="Hierarchical Silhouette Scores" width="70%">
+  <img src="images/ward_silhouette.jpg" alt="Hierarchical Silhouette Scores">
 </div>
 
-*Figure 7 – Silhouette scores for Hierarchical clustering across k = 2 through k = 6.*
+<p align="center">
+  <em>Figure 7 – Silhouette scores for Hierarchical clustering across k = 2 through k = 6.</em>
+</p>
 
 Hierarchical clustering was applied to the PCA-reduced player representation using four linkage methods: complete, average, single, and Ward linkage. After comparing the resulting dendrograms, Ward linkage was selected for further analysis because it produced the most balanced and interpretable cluster structure.
 
@@ -264,7 +269,9 @@ The k = 4 solution produced a slightly higher silhouette score than k = 3, but i
   <img src="images/ward_cluster_rating.jpg" alt="K=3 Cluster Rating Distribution" width="32%">
 </div>
 
-*Figure 8 – Distribution of sniper percentage, rifle percentage, and Rating 3.0 across the final k = 3 hierarchical clustering solution.*
+<p align="center">
+  <em>Figure 8 – Distribution of sniper percentage, rifle percentage, and Rating 3.0 across the final k = 3 hierarchical clustering solution.</em>
+</p>
 
 ---
 
