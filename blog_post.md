@@ -255,23 +255,13 @@ For this reason, the final analysis uses k = 3. Although its silhouette score is
   <em>Figure 7 – Silhouette scores for Hierarchical clustering across k = 2 through k = 6.</em>
 </p>
 
-Hierarchical clustering was applied to the PCA-reduced player representation using four linkage methods: complete, average, single, and Ward linkage. After comparing the resulting dendrograms, Ward linkage was selected for further analysis because it produced the most balanced and interpretable cluster structure.
+Hierarchical clustering was applied to the PCA-reduced player representation using four linkage methods: complete, average, single, and Ward linkage. After comparing the resulting dendrograms, ward linkage was selected for further analysis because it produced the most balanced and interpretable cluster structure.
 
 Unlike K-Means, hierarchical clustering does not require the number of clusters to be specified during model fitting. Instead, the dendrogram in Figure 6 was used to examine the nested grouping structure of the data. The large vertical jumps near the top of the tree suggest that solutions with two or three clusters may capture most of the meaningful structure.
 
 To further evaluate potential cluster solutions, silhouette scores were computed for values of k ranging from 2 through 6 (Figure 7). The highest silhouette score occurred at k = 2, indicating the strongest statistical separation between groups. However, inspection of the resulting clusters showed that this solution primarily separated dedicated AWP players into one cluster and then everyone else into the other.
 
 The k = 4 solution produced a slightly higher silhouette score than k = 3, but it created a very small cluster containing only four observations, suggesting that it was isolating a handful of elite specialists rather than identifying a broadly meaningful player role. For this reason, the final analysis uses k = 3. Although its silhouette score is slightly lower than the k = 2 solution, it provides a better balance between cluster quality, interpretability, and size, revealing distinct groups corresponding to dedicated AWPers, riflers, and lower-output/support-oriented players.
-
-<div align="center">
-  <img src="images/ward_cluster_sniper.jpg" alt="K=3 Cluster Sniper Percentage Distribution" width="32%">
-  <img src="images/ward_cluster_rifle.jpg" alt="K=3 Cluster Rifle Percentage Distribution" width="32%">
-  <img src="images/ward_cluster_rating.jpg" alt="K=3 Cluster Rating Distribution" width="32%">
-</div>
-
-<p align="center">
-  <em>Figure 8 – Distribution of sniper percentage, rifle percentage, and Rating 3.0 across the final k = 3 hierarchical clustering solution.</em>
-</p>
 
 ---
 
@@ -301,7 +291,7 @@ The biplot in Figure 2 reveals a clear split along the PC2 axis. One band of pla
   <img src="images/kmeans_top5_feature_distributions.jpg" alt="Top 5 Feature Distributions by Cluster">
 </div>
 
-Figure 6 – Distribution of the five strongest cluster-defining variables across the (k = 3) K-Means solution.
+Figure 8 – Distribution of the five strongest cluster-defining variables across the (k = 3) K-Means solution.
 
 To better understand how the clusters were formed, we examined the distributions of all features across the (k = 3) solution. Figure 6 highlights five of the most important variables driving cluster separation: sniper_kills_log, sniper_pct_log, awp_kills_log, rifle_pct, and Impact_rating.
 
@@ -318,3 +308,26 @@ Cluster 1 contains the lowest-performing statistical profiles overall. Players i
 Cluster 2 – Elite Star Riflers
 
 Cluster 2 represents the highest-output riflers in the dataset. These players lead all clusters in Rating 3.0, ADR, KPR, Impact Rating, multi-kill percentage, and total rifle kills. Their extremely high AK-47 and M4 kill totals, combined with strong headshot percentages, indicate aggressive mechanically skilled riflers capable of consistently winning duels. Unlike Cluster 0, this group derives its impact primarily from rifle engagements rather than sniper specialization. The cluster captures the archetype of the modern star rifler: high-volume fraggers who create openings, dominate aim duels, and generate large amounts of round-winning damage. The distinction between Cluster 1 and Cluster 2 is especially important. Both are rifle-oriented groups, but Cluster 2 separates itself through substantially higher efficiency and impact metrics, suggesting that the clustering successfully distinguishes supportive riflers from elite carry-style players.
+
+### Breaking Down the Hierarchical Clustering
+
+
+<div align="center">
+  <img src="images/ward_cluster_sniper.jpg" alt="K=3 Cluster Sniper Percentage Distribution" width="32%">
+  <img src="images/ward_cluster_rifle.jpg" alt="K=3 Cluster Rifle Percentage Distribution" width="32%">
+  <img src="images/ward_cluster_rating.jpg" alt="K=3 Cluster Rating Distribution" width="32%">
+</div>
+
+<p align="center">
+  <em>Figure 9 – Distribution of sniper percentage, rifle percentage, and Rating 3.0 across the final k = 3 hierarchical clustering solution.</em>
+</p>
+
+To further investigate whether professional CS2 players naturally separate into distinct statistical archetypes, we examined the distributions among the clusters created by different values of K for Hierarchical Clustering. Figure 9 highlights three key variables that proved useful in interpreting the resulting groups: sniper percentage, rifle percentage, and Rating 3.0.
+
+The sniper percentage boxplot reveals the clearest separation. One cluster exhibits dramatically higher sniper percentages than the others, indicating a group of dedicated AWPers whose impact is generated primarily through sniper rifle gameplay. The remaining two clusters show consistently low sniper percentages, suggesting that both are predominantly rifle-oriented players and not snipers.
+
+The rifle percentage distributions reinforce this interpretation. The two rifle-oriented clusters display substantially higher rifle usage than the AWPer cluster, confirming that the hierarchical clustering successfully separated players according to weapon specialization. While both groups rely heavily on rifles, they differ in overall performance characteristics.
+
+The Rating 3.0 boxplot provides the distinction between these two rifle-oriented clusters. One group displays the highest median rating values and a concentration of strong individual performances, representing the elite high-skill riflers. The other cluster has lower rating values overall, suggesting a collection of support-oriented or lower-impact riflers whose contributions may be less visible through traditional fragging metrics.
+
+Together, these distributions explain why the k = 3 solution was selected. The clustering not only isolates a distinct sniper archetype but also identifies a meaningful separation between elite star riflers and support-oriented riflers. This provides a more informative interpretation than the k = 2 solution, which primarily distinguished snipers/AWPers from everyone else.
