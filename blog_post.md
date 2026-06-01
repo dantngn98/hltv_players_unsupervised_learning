@@ -311,6 +311,8 @@ Cluster 1 contains the lowest-performing statistical profiles overall. Players i
 
 Cluster 2 represents the highest-output riflers in the dataset. These players lead all clusters in Rating 3.0, ADR, KPR, Impact Rating, multi-kill percentage, and total rifle kills. Their extremely high AK-47 and M4 kill totals, combined with strong headshot percentages, indicate aggressive mechanically skilled riflers capable of consistently winning duels. Unlike Cluster 0, this group derives its impact primarily from rifle engagements rather than sniper specialization. The cluster captures the archetype of the modern star rifler: high-volume fraggers who create openings, dominate aim duels, and generate large amounts of round-winning damage. The distinction between Cluster 1 and Cluster 2 is especially important. Both are rifle-oriented groups, but Cluster 2 separates itself through substantially higher efficiency and impact metrics, suggesting that the clustering successfully distinguishes supportive riflers from elite carry-style players.
 
+---
+
 ### Breaking Down the Hierarchical Clustering
 
 
