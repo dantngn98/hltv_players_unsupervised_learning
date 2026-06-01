@@ -313,7 +313,7 @@ Cluster 2 represents the highest-output riflers in the dataset. These players le
 
 ---
 
-### Breaking Down the Hierarchical Clustering
+### Hierarchical Clustering
 
 
 <div align="center">
