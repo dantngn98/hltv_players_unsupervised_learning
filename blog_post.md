@@ -238,6 +238,34 @@ For this reason, the final analysis uses k = 3. Although its silhouette score is
 
 ### Hierarchical Clustering Analysis
 
+<div align="center">
+  <img src="images/ward_dendrogram.jpg" alt="Hierarchical Dendrogram">
+</div>
+
+*Figure 6 – Ward linkage dendrogram for the CS2 player dataset.*
+
+<div align="center">
+  <img src="images/ward_silhouette.jpg" alt="Hierarchical Silhouette Scores">
+</div>
+
+*Figure 7 – Silhouette scores for Hierarchical clustering across k = 2 through k = 6.*
+
+Hierarchical clustering was applied to the PCA-reduced player representation using four linkage methods: complete, average, single, and Ward linkage. After comparing the resulting dendrograms, Ward linkage was selected for further analysis because it produced the most balanced and interpretable cluster structure.
+
+Unlike K-Means, hierarchical clustering does not require the number of clusters to be specified during model fitting. Instead, the dendrogram in Figure 6 was used to examine the nested grouping structure of the data. The large vertical jumps near the top of the tree suggest that solutions with two or three clusters may capture most of the meaningful structure.
+
+To further evaluate potential cluster solutions, silhouette scores were computed for values of k ranging from 2 through 6 (Figure 7). The highest silhouette score occurred at k = 2, indicating the strongest statistical separation between groups. However, inspection of the resulting clusters showed that this solution primarily separated dedicated AWP players into one cluster and then everyone else into the other.
+
+The k = 4 solution produced a slightly higher silhouette score than k = 3, but it created a very small cluster containing only four observations, suggesting that it was isolating a handful of elite specialists rather than identifying a broadly meaningful player role. For this reason, the final analysis uses k = 3. Although its silhouette score is slightly lower than the k = 2 solution, it provides a better balance between cluster quality, interpretability, and size, revealing distinct groups corresponding to dedicated AWPers, riflers, and lower-output/support-oriented players.
+
+<div align="center">
+  <img src="images/ward_cluster_sniper.jpg" alt="K=3 Cluster Sniper Percentage Distribution" width="32%">
+  <img src="images/ward_cluster_rifle.jpg" alt="K=3 Cluster Rifle Percentage Distribution" width="32%">
+  <img src="images/ward_cluster_rating.jpg" alt="K=3 Cluster Rating Distribution" width="32%">
+</div>
+
+*Figure 8 – Distribution of sniper percentage, rifle percentage, and Rating 3.0 across the final k = 3 hierarchical clustering solution.*
+
 ---
 
 ## Discussion
