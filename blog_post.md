@@ -335,3 +335,16 @@ The rifle percentage distributions reinforce this interpretation. The two rifle-
 The Rating 3.0 boxplot provides the distinction between these two rifle-oriented clusters. One group displays the highest median rating values and a concentration of strong individual performances, representing the elite high-skill riflers. The other cluster has lower rating values overall, suggesting a collection of support-oriented or lower-impact riflers whose contributions may be less visible through traditional fragging metrics.
 
 Together, these distributions explain why the k = 3 solution was selected. The clustering not only isolates a distinct sniper archetype but also identifies a meaningful separation between elite star riflers and support-oriented riflers. This provides a more informative interpretation than the k = 2 solution, which primarily distinguished snipers/AWPers from everyone else.
+
+---
+
+## Conclusion
+
+We started this analysis with a simple question: can the numbers tell us how professional CS2 players play, or just how good they are? The answer is both but with a limitation.
+PCA revealed that player performance is genuinely multi-dimensional, requiring 9 components to explain 90% of variance. The two most interpretable dimensions are overall skill level (PC1) and weapon style (PC2). Both K-Means and hierarchical clustering independently converged on the same three-cluster solution: dedicated AWPers, elite star riflers, and support-oriented riflers. That consistency across two distinct approaches is the strongest evidence that this structure is real.
+The harder finding is what the data cannot recover. The five-role taxonomy any CS player knows – AWPer, entry, lurker, support, IGL – does not emerge from aggregate statistics alone. An entry fragger and a lurker produce nearly identical stat lines. HLTV data captures outcomes, not behavior, and behavior is what defines a role. Recovering the full taxonomy would require positional logs, round-by-round timing data, and utility usage sequences. These are the kind of information professional organizations analyze internally through demo review, but is not publicly available.
+
+---
+
+## Check out our code here:
+https://github.com/dantngn98/hltv_players_unsupervised_learning.git
